@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>o365-basic-hygiene.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family:  "Meiryo", "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+</head>
+<body>
+<h1 id="office365-basic-hygiene-checkup">Office365 Basic Hygiene Checkup</h1>
+<p>This brief course covers some &quot;basic hygiene&quot; steps you can take to optimally secure your Office365 tenancy, in leui of Microsoft's &quot;Advanced Threat Protection&quot; service (<em>which can be costly as the volume of mailboxes scales out</em>).</p>
+<h2 id="spf">SPF</h2>
+<h3 id="what-is-it">What is it?</h3>
+<p>Sender Protection Framework (SPF) is a way to tell the rest of the world which servers are authorized to send email form your domain. (<em>For example, if your domain is hosted with Office365, recipients should discard any emails delivered from spammersrus.com purporting to be sent from your domain!</em>)</p>
+<h3 id="do-i-have-it">Do I have it?</h3>
+<p>Enter your domain name into an online SPF testing tool (https://mxtoolbox.com/spf.aspx, for example). For maximum hygine, confirm that:</p>
+<ol>
+<li>An SPF record exists for your domain</li>
+<li>The SPF record ends in <code>-all</code> (A &quot;hard fail&quot;, which instructs receiving mailservers that you do <strong>not</strong> authorize any senders other than those specified, for your domain)</li>
+</ol>
+<p>Here's an example of a well-defined SPF record, which hard-fails any unauthorized sources:</p>
+<p><img src="img/spf1.png" alt="spf1.png"></p>
+<p>Here's an SPF record which, while defined, only soft-fails unauthorized sources (<em>leaving it up to the receiving mailserver to &quot;make a judgement call&quot;</em>):</p>
+<p><img src="img/spf3.png" alt="spf2.png"></p>
+<p>And <strong>here's</strong> an example of a domain with no SPF record:</p>
+<p><img src="img/spf3.png" alt="spf3.png"></p>
+<h3 id="how-do-i-get-it">How do I get it?</h3>
+<p>You'll need access to administer your domain's DNS, and you'll want to create a DNS TXT record with the necessary SPF data. <a href="https://docs.microsoft.com/en-us/office365/securitycompliance/set-up-spf-in-office-365-to-help-prevent-spoofing">Microsoft's support docs</a> explain the process in detail. There are many online SPF record generators, one notable one is https://mxtoolbox.com/SPFRecordGenerator.aspx. If you're fully hosted on Office365, for example, your SPF record could be as simple as <code>v=spf1 include:spf.protection.outlook.com -all</code>.</p>
+<h2 id="dkim">DKIM</h2>
+<h3 id="what-is-it">What is it?</h3>
+<p>DomainKeys Identified Mail (DKIM) is another strategy used to prove to the world which servers <strong>should</strong> be allowed to send email for your domain.</p>
+<h3 id="do-i-have-it">Do I have it?</h3>
+<p>Confirm that DKIM DNS <strong>records exist</strong> for your domain, by using a DKIM validation tool (https://mxtoolbox.com/dkim.aspx, for example). Supply your domain name and &quot;selector1&quot; as a selector.</p>
+<p><img src="img/dkim1.png" alt="Validating DKIM with domain name and selector"></p>
+<p>Here's an example of a correctly configured domain (Hosted on Office365):</p>
+<p><img src="img/dkim2.png" alt="Domain with correct DKIM on Office365"></p>
+<p>Repeat the test for every domain from which you send email (<em>if you have more than one domain name</em>).</p>
+<p>Confirm that DKIM <strong>signing</strong> is setup for your domain by following <a href="https://docs.microsoft.com/en-us/office365/securitycompliance/use-dkim-to-validate-outbound-email">these Microsoft instructions</a>:</p>
+<ol>
+<li>Sign in to Office 365 with your work or school account.</li>
+<li>Select the app launcher icon in the upper-left and choose Admin.</li>
+<li>In the lower-left navigation, expand Admin and choose Exchange.</li>
+<li>Go to Protection &gt; dkim.</li>
+<li>Select the domain for which you want to enable DKIM and then, for Sign messages for this domain with DKIM signatures, choose Enable. Repeat this step for each custom domain.</li>
+</ol>
+<h3 id="how-do-i-get-it">How do I get it?</h3>
+<p><a href="https://docs.microsoft.com/en-us/office365/securitycompliance/use-dkim-to-validate-outbound-email">Microsoft's guide</a> is detailed (<em>but confusing</em>).</p>
+<p>First, determine your <strong>initial domain</strong>. This domain was created for you when you setup Office365, and it ends in <em>.onmicrosoft.com</em>. Typically, your initial domain will be the your actual domain name (<em>i.e &quot;widgets.com&quot;</em>), with dots removed, followed by &quot;<em>onmicrosoft.com</em>&quot;. So <em>widgets.com</em>'s <strong>initial domain name</strong> will be <em>widgetscom.onmicrosoft.com</em>.</p>
+<p><strong>Tip: You can also follow the steps above for enabling DKIM in Office365's Exchange Online admin. The resulting page will show you all your configured domains.</strong></p>
+<p>Secondly, determine your <strong>domainGUID</strong>. Unless you're a &quot;GCC High&quot; goverment customer, your <strong>domainGUID</strong> will simply be the same as your desired email domain - i.e, &quot;<em>widgets.com</em>&quot;, with dots replaced with dashes. (<em>i.e., &quot;widgets-com&quot;</em>).</p>
+<p>Now, that you have yoru <strong>initial domain</strong> and <strong>domainGUID</strong>, for every domain you want to protect, create 2 CNAME DNS records:</p>
+<pre class="hljs"><code><div>Host name:			selector1._domainkey
+Points to address or value:	selector1-&lt;domainGUID&gt;._domainkey.&lt;initialDomain&gt; 
+TTL:				3600
+
+Host name:			selector2._domainkey
+Points to address or value:	selector2-&lt;domainGUID&gt;._domainkey.&lt;initialDomain&gt; 
+TTL:				3600
+</div></code></pre>
+<p>In the example of widgets.com, the following 2 records will be created:</p>
+<pre class="hljs"><code><div>Host name:			selector1._domainkey
+Points to address or value:	selector1-widgets.com._domainkey.widgets-com.onmicrosoft.com
+TTL:				3600
+
+Host name:			selector2._domainkey
+Points to address or value:	selector2-widgets.com._domainkey.widgets-com.onmicrosoft.com 
+TTL:				3600
+</div></code></pre>
+<p>Now enable DKIM <strong>signing</strong> for your domain by following <a href="https://docs.microsoft.com/en-us/office365/securitycompliance/use-dkim-to-validate-outbound-email">these Microsoft instructions</a>:</p>
+<ol>
+<li>Sign in to Office 365 with your work or school account.</li>
+<li>Select the app launcher icon in the upper-left and choose Admin.</li>
+<li>In the lower-left navigation, expand Admin and choose Exchange.</li>
+<li>Go to Protection &gt; dkim.</li>
+<li>Select the domain for which you want to enable DKIM and then, for Sign messages for this domain with DKIM signatures, choose Enable. Repeat this step for each custom domain.</li>
+</ol>
+<p>(<em>Note : If the option to enable DKIM signing for your custom domain doesn't exist, you may need to <a href="https://www.funkypenguin.co.nz/note/enabling-dkim-on-office365-easy-as-bathing-a-cat/">use PowerShell</a></em>)</p>
+<h2 id="dmarc">DMARC</h2>
+<h3 id="what-is-it">What is it?</h3>
+<p>Domain-based Message Authentication, Reporting, and Conformance (DMARC) augments SPF, by testing not only the &quot;envelope sender&quot; of an email (<em>the address that bounces would go to</em>), but also the purported &quot;From&quot; address of the sender.</p>
+<p>Unlike SPF, DMARC offers far more flexibility regarding what remote mail systems <strong>do</strong> with email which fails validation - you can choose to reject/quarantine a percentage of emails, have delivery reports sent to a nominated email address daily, etc.</p>
+<h3 id="do-i-have-it">Do I have it?</h3>
+<p>Confirm that DMARC DNS TXT <strong>records exist</strong> for your domain, by using a DMARC validation tool (https://mxtoolbox.com/dmarc.aspx, for example). Supply your domain name and click <code>DMARC Lookup</code>.</p>
+<p>Here's an example of a correctly configured domain:</p>
+<p><img src="img/dmarc1.png" alt="Domain with correct DMARC on Office365"></p>
+<p>And here's an example of an unconfigured domain:</p>
+<p><img src="img/dmarc2.png" alt="Domain with unconfigured DMARC on Office365"></p>
+<h3 id="how-do-i-get-it">How do I get it?</h3>
+<p>To protect your outgoing email with DMARC, setup a DNS TXT record.</p>
+<p>Microsoft provides a <a href="https://docs.microsoft.com/en-us/office365/securitycompliance/use-dmarc-to-validate-email">guide</a>, as does <a href="https://support.google.com/a/answer/2466563?hl=en">Google</a>. You can also use an <a href="https://mxtoolbox.com/DMARCRecordGenerator.aspx?">online DMARC record generator</a>.</p>
+<p>At the most basic (<em>and harmless</em>) level, add a TXT record like this to your domain:</p>
+<p><code>_dmarc.yourdommain.com --&gt; v=DMARC1; p=none; rua=mailto:postmaster@yourdomain.com</code></p>
+<p>If you want to be more aggressive, and instruct remote servers to <strong>reject</strong> any emails which appear to be spoofed from you, use a record like this:</p>
+<p><code>_dmarc.yourdommain.com --&gt; v=DMARC1; p=reject; rua=mailto:postmaster@yourdomain.com</code></p>
+<p>You can also stagger the rollout of DMARC, by instructing remote servers to reject only 10% of your email, and gradually increase this percentage:</p>
+<p><code>_dmarc.yourdommain.com --&gt; v=DMARC1; p=none; rua=mailto:postmaster@yourdomain.com; pct=10</code></p>
+
+</body>
+</html>
