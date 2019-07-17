@@ -26,11 +26,11 @@ Throughout this tutorial, we'll be using the Office365 "Exchange admin Center". 
 
 In the navigation panel on the left-hand side, click on `... Show all` to expand navigation:
 
-![Expanding navigation to show all](basicnav1.png)
+![Expanding navigation to show all](img/basicnav1.png)
 
 Under `Admin Centers`, click `Exchange`:
 
-![Click Admin Centers, click Exchange](basicnav2.png)
+![Click Admin Centers, click Exchange](img/basicnav2.png)
 
 You are redirected to the `Exchange admin center`:
 
