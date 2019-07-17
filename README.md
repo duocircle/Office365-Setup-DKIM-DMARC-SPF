@@ -34,7 +34,7 @@ Under `Admin Centers`, click `Exchange`:
 
 You are redirected to the `Exchange admin center`:
 
-![Exchange admin center](basicnav3.png)
+![Exchange admin center](img/basicnav3.png)
 
 
 ## 1. Setup a catch-all mailbox
@@ -54,41 +54,41 @@ You can either have catch-all emails delivered to your own mailbox, or you can e
 
 In the `Exchange admin center`, navigate to `recipients` -> `groups`:
 
-![Admin Centers -> Exchange -> Groups](catchall1.png)
+![Admin Centers -> Exchange -> Groups](img/catchall1.png)
 
 Under `groups`, click the arrow on the right of `+ New Ofifce 365 group` to drop down a list of group types, and select `Dynamic distribution list`:
 
-![Admin Centers -> Exchange -> Groups](catchall2.png)
+![Admin Centers -> Exchange -> Groups](img/catchall2.png)
 
 Name your distribution list `all-users` (`Display name` **and** `Alias`), enter a note, and click `Save`:
 
-![Admin Centers -> Exchange -> Groups](catchall3.png)
+![Admin Centers -> Exchange -> Groups](img/catchall3.png)
 
 #### Alter mail flow
 
 In `Exchange admin center`, navigate to `mail flow` -> `accepted domains`:
 
-![Exchange admin center -> mail flow -> accepted domains](catchall4.png)
+![Exchange admin center -> mail flow -> accepted domains](img/catchall4.png)
 
 Highlight your domain, and click the pencil icon to edit it:
 
-![Select domain and edit it](catchall5.png)
+![Select domain and edit it](img/catchall5.png)
 
 Under `This accepted domain is:`, choose `Internal Relay`, and click Save:
 
-![Set domain to Internal Relay](catchall6.png)
+![Set domain to Internal Relay](img/catchall6.png)
 
 Upon saving, you'll be warned that you don't have an outbound connector for this domain. You can safely ignore this warning - you don't **need** an outbound connector, because you're about to implement a trick to deliver all un-matched email to a local mailbox.
 
-![Acknowledge warning](catchall7.png)
+![Acknowledge warning](img/catchall7.png)
 
 Navigate to `mail flow` -> `rules`:
 
-![Mail flow, rules](catchall8.png)
+![Mail flow, rules](img/catchall8.png)
 
 Click the `+` sign to add a new rule, and choose `Create new rule` from the dropdown:
 
-![Mail flow, rules](catchall9.png)
+![Mail flow, rules](img/catchall9.png)
 
 Use the interface to create a rule with the following:
 
@@ -100,7 +100,7 @@ Use the interface to create a rule with the following:
 
 Save the rule:
 
-![Mail flow, rules](catchall10.png)
+![Mail flow, rules](img/catchall10.png)
 
 Finally, send an email from an outside address to thisaddressdoesntexist@yourdomain.com, and confirm that the message is delivered to the catch-all mailbox.
 
@@ -123,15 +123,15 @@ Enter your domain name into an online SPF testing tool (https://mxtoolbox.com/sp
 
 Here's an example of a well-defined SPF record, which hard-fails any unauthorized sources:
 
-![spf1.png](spf1.png)
+![spf1.png](img/spf1.png)
 
 Here's an SPF record which, while defined, only soft-fails unauthorized sources (*leaving it up to the receiving mailserver to "make a judgement call"*):
 
-![spf2.png](spf3.png)
+![spf2.png](img/spf3.png)
 
 And **here's** an example of a domain with no SPF record:
 
-![spf3.png](spf3.png)
+![spf3.png](img/spf3.png)
 
 ### How do I get it?
 
@@ -147,11 +147,11 @@ DomainKeys Identified Mail (DKIM) is another strategy used to prove to the world
 
 Confirm that DKIM DNS **records exist** for your domain, by using a DKIM validation tool (https://mxtoolbox.com/dkim.aspx, for example). Supply your domain name and "selector1" as a selector. 
 
-![Validating DKIM with domain name and selector](dkim1.png)
+![Validating DKIM with domain name and selector](img/dkim1.png)
 
 Here's an example of a correctly configured domain (Hosted on Office365):
 
-![Domain with correct DKIM on Office365](dkim2.png)
+![Domain with correct DKIM on Office365](img/dkim2.png)
 
 Repeat the test for every domain from which you send email (*if you have more than one domain name*).
 
@@ -221,11 +221,11 @@ Confirm that DMARC DNS TXT **records exist** for your domain, by using a DMARC v
 
 Here's an example of a correctly configured domain:
 
-![Domain with correct DMARC on Office365](dmarc1.png)
+![Domain with correct DMARC on Office365](img/dmarc1.png)
 
 And here's an example of an unconfigured domain:
 
-![Domain with unconfigured DMARC on Office365](dmarc2.png)
+![Domain with unconfigured DMARC on Office365](img/dmarc2.png)
 
 ### How do I get it?
 
