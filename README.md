@@ -4,7 +4,7 @@ This brief course covers some "basic hygiene" steps you can take to optimally se
 
 Let's set the scene - you've inherited the family business, **Widgets LLC**. You've bought the domain "widgets.com", purchased an Office365 subscription, and you've sent your first email from @widgets.com. Hurrah! 
 
-You've read stories about phishing, spear-phishing, "sextorsion", etc., and you suspect that without a rigorous "phishing checkup", your fresh new domain is ripe for abuse (*and you're right!*). 
+You've read stories about phishing, spear-phishing, "sextortion", etc., and you suspect that without a rigorous "phishing checkup", your fresh new domain is ripe for abuse (*and you're right!*). 
 
 This checkup will guide you through the process of optimally configuring your Office365-hosted domain for email hygine and phishing protection.
 
@@ -217,7 +217,7 @@ Unlike SPF, DMARC offers far more flexibility regarding what remote mail systems
 
 **Be aware that *lots of receiving server* will send you a report.**
 
-**Depending on the volume of mail you're sending (and how attractive your domain is to spoofers), this can result in hundreds of DMARC reports a day from different servers. This can become a little overwhelming to manage. This is why there are so many DMARC reporting tools.**
+**Depending on the volume of mail you're sending (and how attractive your domain is to spoofers), this can result in hundreds of DMARC reports a day from different servers. This can become a little overwhelming to manage. This is why there are so many DMARC reporting toolsN.**
 
 My advice sign up with a tool that can help you process and interpret your DMARC reports, let them handle the heavy processing of parsing hundreds of reports a day and making actionable graphs based on the information they parse. 
 
