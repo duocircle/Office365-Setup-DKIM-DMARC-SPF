@@ -127,7 +127,7 @@ Here's an example of a well-defined SPF record, which hard-fails any unauthorize
 
 Here's an SPF record which, while defined, only soft-fails unauthorized sources (*leaving it up to the receiving mailserver to "make a judgement call"*):
 
-![spf2.png](img/spf3.png)
+![spf2.png](img/spf2.png)
 
 And **here's** an example of a domain with no SPF record:
 
