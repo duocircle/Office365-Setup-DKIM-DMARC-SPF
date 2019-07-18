@@ -215,7 +215,9 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) augments
 
 Unlike SPF, DMARC offers far more flexibility regarding what remote mail systems **do** with email which fails validation - you can choose to reject/quarantine a percentage of emails, have delivery reports sent to a nominated email address daily, etc.
 
-**Be aware that almost every receiving server will send you a report. Depending on the volume of mail you're sending (and how attractive your domain is to spoofers), this can result in hundreds of DMARC reports a day from different servers. Which can become a little overwhelming to manage. This is why there are so many DMARC reporting services.**
+**Be aware that *lots of receiving server* will send you a report.**
+
+**Depending on the volume of mail you're sending (and how attractive your domain is to spoofers), this can result in hundreds of DMARC reports a day from different servers. This can become a little overwhelming to manage. This is why there are so many DMARC reporting tools.**
 
 My advice sign up with a tool that can help you process and interpret your DMARC reports, let them handle the heavy processing of parsing hundreds of reports a day and making actionable graphs based on the information they parse. 
 
