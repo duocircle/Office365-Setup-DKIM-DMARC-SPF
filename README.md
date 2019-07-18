@@ -12,7 +12,7 @@ This checkup will guide you through the process of optimally configuring your Of
 
 ### What do you need to know? 
 
-1. First, you can this process to take around a week, depending on the complexity of your email setup.
+1. First, you can expect this process to take around a week, depending on the complexity of your email setup.
 2. Although email is a "standard", there are countless variations on how providers implement some features, especially the "newer" features like SPIF, DKIM, etc. There will be edge cases where systems won't work "as they should", and some companies you correspond with won't have implemented the same anti-phishing protections that you will. The best you can do is to optimize **your** domain's security profile.
 
 ### What do you need?
@@ -243,4 +243,4 @@ If you want to be more aggressive, and instruct remote servers to **reject** any
 
 You can also stagger the rollout of DMARC, by instructing remote servers to reject only 10% of your email, and gradually increase this percentage:
 
-`_dmarc.yourdommain.com --> v=DMARC1; p=none; rua=mailto:postmaster@yourdomain.com; pct=10`
+`_dmarc.yourdommain.com --> v=DMARC1; p=reject; rua=mailto:postmaster@yourdomain.com; pct=10`
