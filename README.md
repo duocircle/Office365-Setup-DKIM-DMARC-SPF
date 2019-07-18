@@ -18,7 +18,7 @@ This checkup will guide you through the process of optimally configuring your Of
 ### What do you need?
 
 1. You'll need to create DNS records as part of the checkup, so you'll need administrative access to your DNS provider.
-2. You'll also want to receive reports of email failures, so ensure that postmaster@yourdomain.com is forwarded to a mailbox you can read.
+2. You'll also want to receive reports of email failures, so ensure that postmaster@widgets.com is forwarded to a mailbox you can read.
 
 ### Basic Navigation (How to find the `Exchange admin center`)
 
@@ -102,7 +102,7 @@ Save the rule:
 
 ![Mail flow, rules](img/catchall10.png)
 
-Finally, send an email from an outside address to thisaddressdoesntexist@yourdomain.com, and confirm that the message is delivered to the catch-all mailbox.
+Finally, send an email from an outside address to thisaddressdoesntexist@widgets.com, and confirm that the message is delivered to the catch-all mailbox.
 
 
 
@@ -127,11 +127,11 @@ Here's an example of a well-defined SPF record, which hard-fails any unauthorize
 
 Here's an SPF record which, while defined, only soft-fails unauthorized sources (*leaving it up to the receiving mailserver to "make a judgement call"*):
 
-![spf2.png](img/spf2.png)
+![spf3.png](img/spf3.png)
 
 And **here's** an example of a domain with no SPF record:
 
-![spf3.png](img/spf3.png)
+![spf2.png](img/spf2.png)
 
 ### How do I get it?
 
@@ -240,12 +240,12 @@ Microsoft provides a [guide](https://docs.microsoft.com/en-us/office365/security
 
 At the most basic (*and harmless*) level, add a TXT record like this to your domain:
 
-`_dmarc.yourdommain.com --> v=DMARC1; p=none; rua=mailto:postmaster@yourdomain.com`
+`_dmarc.yourdommain.com --> v=DMARC1; p=none; rua=mailto:postmaster@widgets.com`
 
 If you want to be more aggressive, and instruct remote servers to **reject** any emails which appear to be spoofed from you, use a record like this:
 
-`_dmarc.yourdommain.com --> v=DMARC1; p=reject; rua=mailto:postmaster@yourdomain.com`
+`_dmarc.yourdommain.com --> v=DMARC1; p=reject; rua=mailto:postmaster@widgets.com`
 
 You can also stagger the rollout of DMARC, by instructing remote servers to reject only 10% of your email, and gradually increase this percentage:
 
-`_dmarc.yourdommain.com --> v=DMARC1; p=reject; rua=mailto:postmaster@yourdomain.com; pct=10`
+`_dmarc.yourdommain.com --> v=DMARC1; p=reject; rua=mailto:postmaster@widgets.com; pct=10`

@@ -467,11 +467,11 @@ TTL:				3600
 <p>To protect your outgoing email with DMARC, setup a DNS TXT record.</p>
 <p>Microsoft provides a <a href="https://docs.microsoft.com/en-us/office365/securitycompliance/use-dmarc-to-validate-email">guide</a>, as does <a href="https://support.google.com/a/answer/2466563?hl=en">Google</a>. You can also use an <a href="https://mxtoolbox.com/DMARCRecordGenerator.aspx?">online DMARC record generator</a>.</p>
 <p>At the most basic (<em>and harmless</em>) level, add a TXT record like this to your domain:</p>
-<p><code>_dmarc.yourdommain.com --&gt; v=DMARC1; p=none; rua=mailto:postmaster@yourdomain.com</code></p>
+<p><code>_dmarc.yourdommain.com --&gt; v=DMARC1; p=none; rua=mailto:postmaster@widgets.com</code></p>
 <p>If you want to be more aggressive, and instruct remote servers to <strong>reject</strong> any emails which appear to be spoofed from you, use a record like this:</p>
-<p><code>_dmarc.yourdommain.com --&gt; v=DMARC1; p=reject; rua=mailto:postmaster@yourdomain.com</code></p>
+<p><code>_dmarc.yourdommain.com --&gt; v=DMARC1; p=reject; rua=mailto:postmaster@widgets.com</code></p>
 <p>You can also stagger the rollout of DMARC, by instructing remote servers to reject only 10% of your email, and gradually increase this percentage:</p>
-<p><code>_dmarc.yourdommain.com --&gt; v=DMARC1; p=none; rua=mailto:postmaster@yourdomain.com; pct=10</code></p>
+<p><code>_dmarc.yourdommain.com --&gt; v=DMARC1; p=none; rua=mailto:postmaster@widgets.com; pct=10</code></p>
 
 </body>
 </html>
