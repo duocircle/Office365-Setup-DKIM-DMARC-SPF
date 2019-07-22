@@ -251,3 +251,10 @@ If you want to be more aggressive, and instruct remote servers to **reject** any
 You can also stagger the rollout of DMARC, by instructing remote servers to reject only 10% of your email, and gradually increase this percentage:
 
 `_dmarc.yourdommain.com --> v=DMARC1; p=reject; rua=mailto:postmaster@widgets.com; pct=10`
+
+
+## IPv6
+
+To support IPv6 in Office 365 you will need to open a support request with Microsoft per
+https://docs.microsoft.com/en-us/office365/SecurityCompliance/support-for-anonymous-inbound-email-messages-over-ipv6
+
