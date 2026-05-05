@@ -1,260 +1,195 @@
-# Office365 Basic Hygiene Checkup
+# Office 365 Basic Hygiene Checkup
 
-This brief course covers some "basic hygiene" steps you can take to optimally secure your Office365 tenancy, in leui of Microsoft's "Advanced Threat Protection" service (*which can be costly as the volume of mailboxes scales out*).
+This guide covers basic email authentication hygiene for Microsoft 365 tenants that are not using a dedicated phishing gateway or the higher-end Microsoft Defender for Office 365 features.
 
-Let's set the scene - you've inherited the family business, **Widgets LLC**. You've bought the domain "widgets.com", purchased an Office365 subscription, and you've sent your first email from @widgets.com. Hurrah! 
-
-You've read stories about phishing, spear-phishing, "sextortion", etc., and you suspect that without a rigorous "phishing checkup", your fresh new domain is ripe for abuse (*and you're right!*). 
-
-This checkup will guide you through the process of optimally configuring your Office365-hosted domain for email hygine and phishing protection.
+The goal is to make your own domain harder to spoof by publishing SPF, enabling DKIM signing, and rolling out DMARC carefully. Test changes before enforcing them, especially if third-party services send mail as your domain.
 
 ## Preparation
 
-### What do you need to know? 
+### What You Need To Know
 
-1. First, you can expect this process to take around a week, depending on the complexity of your email setup.
-2. Although email is a "standard", there are countless variations on how providers implement some features, especially the "newer" features like SPIF, DKIM, etc. There will be edge cases where systems won't work "as they should", and some companies you correspond with won't have implemented the same anti-phishing protections that you will. The best you can do is to optimize **your** domain's security profile.
+1. Expect the process to take at least a week if your organization uses multiple mail-sending services.
+2. SPF, DKIM, and DMARC only work well when you account for every legitimate sender that uses your domain.
+3. Start with monitoring, fix legitimate failures, then move toward enforcement.
+4. Microsoft changes admin portals often. When possible, use Exchange Online PowerShell to retrieve tenant-specific values.
 
-### What do you need?
+### What You Need
 
-1. You'll need to create DNS records as part of the checkup, so you'll need administrative access to your DNS provider.
-2. You'll also want to receive reports of email failures, so ensure that postmaster@widgets.com is forwarded to a mailbox you can read.
+1. Administrative access to your DNS provider.
+2. Microsoft 365 admin access.
+3. A mailbox or DMARC reporting service that can receive aggregate reports.
+4. A list of all services that send mail for your domain, including Microsoft 365, ticketing systems, CRMs, payroll systems, marketing platforms, websites, and scanners.
 
-### Basic Navigation (How to find the `Exchange admin center`)
+## Do Not Use a Catch-All Mailbox as a Hygiene Control
 
-Throughout this tutorial, we'll be using the Office365 "Exchange admin Center". To navigate to the admin center, log into https://admin.microsoft.com/ using your Microsoft Office365 credentials. Your first landing page is `Microsoft 365 admin center`. 
+Older versions of this guide recommended creating a catch-all mailbox by changing the accepted domain to `Internal Relay` and redirecting mail that did not match a dynamic group of users. Do not use that approach as a basic hygiene control.
 
-In the navigation panel on the left-hand side, click on `... Show all` to expand navigation:
+That design is risky because it can redirect legitimate mail for shared mailboxes, Microsoft 365 groups, distribution lists, mail contacts, resource mailboxes, aliases, and other recipient types that are not captured by a simple "all users" group. It also changes accepted-domain behavior in a way that Microsoft normally uses for split-domain or relay scenarios.
 
-![Expanding navigation to show all](img/basicnav1.png)
+For normal Microsoft 365 tenants:
 
-Under `Admin Centers`, click `Exchange`:
+- Keep your accepted domain as `Authoritative` when all valid recipients are in Microsoft 365.
+- Let Exchange reject mail to non-existent recipients.
+- Create aliases for common misspellings only when there is a documented business need.
+- Use message trace and user reporting to investigate suspicious mail instead of collecting all mail to invalid addresses.
 
-![Click Admin Centers, click Exchange](img/basicnav2.png)
-
-You are redirected to the `Exchange admin center`:
-
-![Exchange admin center](img/basicnav3.png)
-
-
-## 1. Setup a catch-all mailbox
-
-### Summary ###
-
-By default, when someone emails a non-existent address at your domain, they receive an mail delivery failure error (*a "bounce"*) in response. But if you want total control of incoming email for your domain, and you _don't_ want to bounce mis-addressed email (*to **accounst@widgets.com**, for example*), you'll want to setup an administrative "catch-all" mailbox.
-
-You can either have catch-all emails delivered to your own mailbox, or you can establish a dedicated (*and licenced*) mailbox for this purpose.
-
-* Difficulty: Medium
-* Risk: Low
-
-### Process
-
-#### Create dynamic distribution list of all users 
-
-In the `Exchange admin center`, navigate to `recipients` -> `groups`:
-
-![Admin Centers -> Exchange -> Groups](img/catchall1.png)
-
-Under `groups`, click the arrow on the right of `+ New Ofifce 365 group` to drop down a list of group types, and select `Dynamic distribution list`:
-
-![Admin Centers -> Exchange -> Groups](img/catchall2.png)
-
-Name your distribution list `all-users` (`Display name` **and** `Alias`), enter a note, and click `Save`:
-
-![Admin Centers -> Exchange -> Groups](img/catchall3.png)
-
-#### Alter mail flow
-
-In `Exchange admin center`, navigate to `mail flow` -> `accepted domains`:
-
-![Exchange admin center -> mail flow -> accepted domains](img/catchall4.png)
-
-Highlight your domain, and click the pencil icon to edit it:
-
-![Select domain and edit it](img/catchall5.png)
-
-Under `This accepted domain is:`, choose `Internal Relay`, and click Save:
-
-![Set domain to Internal Relay](img/catchall6.png)
-
-Upon saving, you'll be warned that you don't have an outbound connector for this domain. You can safely ignore this warning - you don't **need** an outbound connector, because you're about to implement a trick to deliver all un-matched email to a local mailbox.
-
-![Acknowledge warning](img/catchall7.png)
-
-Navigate to `mail flow` -> `rules`:
-
-![Mail flow, rules](img/catchall8.png)
-
-Click the `+` sign to add a new rule, and choose `Create new rule` from the dropdown:
-
-![Mail flow, rules](img/catchall9.png)
-
-Use the interface to create a rule with the following:
-
-* Apply this rule if the sender is located.. **Outside the organization**
-* Do the following.. 
-  * **Redirect the message to \<your catch-all mailbox>**
-  * **Prepend the subject of the message with: "[catch-all] "** (indicate to the recipient that this email has been "caught")
-* Except if.. **The recipient is a member of all-users** (the dynamic group you created)
-
-Save the rule:
-
-![Mail flow, rules](img/catchall10.png)
-
-Finally, send an email from an outside address to thisaddressdoesntexist@widgets.com, and confirm that the message is delivered to the catch-all mailbox.
-
-
-
-
+Reference: [Accepted domains in Exchange](https://learn.microsoft.com/en-us/exchange/mail-flow/accepted-domains/accepted-domains)
 
 ## SPF
 
-### What is it?
+### What Is It?
 
-Sender Protection Framework (SPF) is a way to tell the rest of the world which servers are authorized to send email form your domain. (*For example, if your domain is hosted with Office365, recipients should discard any emails delivered from spammersrus.com purporting to be sent from your domain!*)
+Sender Policy Framework (SPF) tells receiving mail systems which servers are authorized to send mail for your domain.
 
-### Do I have it?
+SPF checks the envelope sender domain, not necessarily the visible `From` address that users see. DMARC is what ties SPF or DKIM authentication back to the visible `From` domain through alignment.
 
-Enter your domain name into an online SPF testing tool (https://mxtoolbox.com/spf.aspx, for example). For maximum hygine, confirm that:
+### Do I Have It?
 
-1. An SPF record exists for your domain
-2. The SPF record ends in `-all` (A "hard fail", which instructs receiving mailservers that you do **not** authorize any senders other than those specified, for your domain)
+Enter your domain into an SPF testing tool such as <https://mxtoolbox.com/spf.aspx>. Confirm that:
 
-Here's an example of a well-defined SPF record, which hard-fails any unauthorized sources:
+1. Exactly one SPF TXT record exists for the domain.
+2. It includes every legitimate sender.
+3. It does not exceed the SPF DNS lookup limit.
+4. It ends with an enforcement rule such as `-all` or `~all`.
 
-![spf1.png](img/spf1.png)
+Microsoft recommends `-all` for Microsoft 365 domains when DKIM and DMARC are also configured, because DMARC reporting lets you validate failures and move toward enforcement.
 
-Here's an SPF record which, while defined, only soft-fails unauthorized sources (*leaving it up to the receiving mailserver to "make a judgement call"*):
+Example for a domain that sends only from Microsoft 365:
 
-![spf3.png](img/spf3.png)
+```text
+v=spf1 include:spf.protection.outlook.com -all
+```
 
-And **here's** an example of a domain with no SPF record:
+If you use other services, include them too. Example only:
 
-![spf2.png](img/spf2.png)
+```text
+v=spf1 include:spf.protection.outlook.com include:mail.example-saas.com ip4:203.0.113.10 -all
+```
 
-### How do I get it?
-
-You'll need access to administer your domain's DNS, and you'll want to create a DNS TXT record with the necessary SPF data. [Microsoft's support docs](https://docs.microsoft.com/en-us/office365/securitycompliance/set-up-spf-in-office-365-to-help-prevent-spoofing) explain the process in detail. There are many online SPF record generators, one notable one is https://mxtoolbox.com/SPFRecordGenerator.aspx. If you're fully hosted on Office365, for example, your SPF record could be as simple as `v=spf1 include:spf.protection.outlook.com -all`.
+Reference: [Set up SPF for Microsoft 365](https://learn.microsoft.com/en-us/microsoft-365/security/office-365-security/how-office-365-uses-spf-to-prevent-spoofing?view=o365-worldwide)
 
 ## DKIM
 
-### What is it?
+### What Is It?
 
-DomainKeys Identified Mail (DKIM) is another strategy used to prove to the world which servers **should** be allowed to send email for your domain.
+DomainKeys Identified Mail (DKIM) signs outbound mail with a private key. Receiving mail systems verify the signature with public DNS records. DKIM is especially important because forwarded mail often breaks SPF, but DKIM can survive forwarding when the message is not modified.
 
-### Do I have it?
+### Do I Have It?
 
-Confirm that DKIM DNS **records exist** for your domain, by using a DKIM validation tool (https://mxtoolbox.com/dkim.aspx, for example). Supply your domain name and "selector1" as a selector. 
+Check DKIM in the Microsoft Defender portal or Exchange Online PowerShell. You can also use a DKIM validation tool such as <https://mxtoolbox.com/dkim.aspx>, but the selector value must match the selector Microsoft is using for your domain.
 
-![Validating DKIM with domain name and selector](img/dkim1.png)
+Use PowerShell to inspect all configured domains:
 
-Here's an example of a correctly configured domain (Hosted on Office365):
-
-![Domain with correct DKIM on Office365](img/dkim2.png)
-
-Repeat the test for every domain from which you send email (*if you have more than one domain name*).
-
-Confirm that DKIM **signing** is setup for your domain by following [these Microsoft instructions](https://docs.microsoft.com/en-us/office365/securitycompliance/use-dkim-to-validate-outbound-email):
-
-1. Sign in to Office 365 with your work or school account.
-2. Select the app launcher icon in the upper-left and choose Admin.
-3. In the lower-left navigation, expand Admin and choose Exchange.
-4. Go to Protection > dkim.
-4. Select the domain for which you want to enable DKIM and then, for Sign messages for this domain with DKIM signatures, choose Enable. Repeat this step for each custom domain.
-
-### How do I get it?
-
-[Microsoft's guide](https://docs.microsoft.com/en-us/office365/securitycompliance/use-dkim-to-validate-outbound-email) is detailed (*but confusing*). 
-
-First, determine your **initial domain**. This domain was created for you when you setup Office365, and it ends in *.onmicrosoft.com*. Typically, your initial domain will be the your actual domain name (*i.e "widgets.com"*), with dots removed, followed by "*onmicrosoft.com*". So *widgets.com*'s **initial domain name** will be *widgetscom.onmicrosoft.com*.
-
-**Tip: You can also follow the steps above for enabling DKIM in Office365's Exchange Online admin. The resulting page will show you all your configured domains.**
-
-Secondly, determine your **domainGUID**. Unless you're a "GCC High" goverment customer, your **domainGUID** will simply be the same as your desired email domain - i.e, "*widgets.com*", with dots replaced with dashes. (*i.e., "widgets-com"*).
-
-Now, that you have yoru **initial domain** and **domainGUID**, for every domain you want to protect, create 2 CNAME DNS records:
-
-```
-Host name:			selector1._domainkey
-Points to address or value:	selector1-<domainGUID>._domainkey.<initialDomain> 
-TTL:				3600
-
-Host name:			selector2._domainkey
-Points to address or value:	selector2-<domainGUID>._domainkey.<initialDomain> 
-TTL:				3600
+```powershell
+Get-DkimSigningConfig | Format-List Name,Enabled,Status,Selector1CNAME,Selector2CNAME
 ```
 
-In the example of widgets.com, the following 2 records will be created:
+For one domain:
 
-```
-Host name:			selector1._domainkey
-Points to address or value:	selector1-widgets.com._domainkey.widgets-com.onmicrosoft.com
-TTL:				3600
-
-Host name:			selector2._domainkey
-Points to address or value:	selector2-widgets.com._domainkey.widgets-com.onmicrosoft.com 
-TTL:				3600
+```powershell
+Get-DkimSigningConfig -Identity widgets.com |
+  Format-List Name,Enabled,Status,Selector1CNAME,Selector2CNAME
 ```
 
-Now enable DKIM **signing** for your domain by following [these Microsoft instructions](https://docs.microsoft.com/en-us/office365/securitycompliance/use-dkim-to-validate-outbound-email):
+### How Do I Configure It?
 
-1. Sign in to Office 365 with your work or school account.
-2. Select the app launcher icon in the upper-left and choose Admin.
-3. In the lower-left navigation, expand Admin and choose Exchange.
-4. Go to Protection > dkim.
-5. Select the domain for which you want to enable DKIM and then, for Sign messages for this domain with DKIM signatures, choose Enable. Repeat this step for each custom domain.
+Do not manually derive DKIM CNAME targets from examples. Microsoft introduced a newer DKIM CNAME format for new custom domains in May 2025, and existing domains can still use the older format. The safe process is to retrieve the exact `Selector1CNAME` and `Selector2CNAME` values from Microsoft 365 for each domain.
 
-(*Note : If the option to enable DKIM signing for your custom domain doesn't exist, you may need to [use PowerShell](https://www.funkypenguin.co.nz/note/enabling-dkim-on-office365-easy-as-bathing-a-cat/)*)
+If the domain does not already have a DKIM signing config, create it first:
+
+```powershell
+New-DkimSigningConfig -DomainName widgets.com -Enabled $false
+```
+
+Then retrieve the required CNAME values:
+
+```powershell
+Get-DkimSigningConfig -Identity widgets.com |
+  Format-List Selector1CNAME,Selector2CNAME
+```
+
+Create two CNAME records at your DNS provider:
+
+```text
+Host name: selector1._domainkey
+Points to: <Selector1CNAME value from Microsoft 365>
+
+Host name: selector2._domainkey
+Points to: <Selector2CNAME value from Microsoft 365>
+```
+
+After DNS has propagated, enable DKIM signing:
+
+```powershell
+Set-DkimSigningConfig -Identity widgets.com -Enabled $true
+```
+
+Verify status:
+
+```powershell
+Get-DkimSigningConfig -Identity widgets.com |
+  Format-List Name,Enabled,Status
+```
+
+Reference: [Configure DKIM for Microsoft 365](https://learn.microsoft.com/en-us/defender-office-365/email-authentication-dkim-configure)
 
 ## DMARC
 
-### What is it?
+### What Is It?
 
-Domain-based Message Authentication, Reporting, and Conformance (DMARC) augments SPF, by testing not only the "envelope sender" of an email (*the address that bounces would go to*), but also the purported "From" address of the sender.
+Domain-based Message Authentication, Reporting, and Conformance (DMARC) checks whether SPF or DKIM passed and aligned with the visible `From` domain. It also tells receiving systems what to do when a message fails DMARC.
 
-Unlike SPF, DMARC offers far more flexibility regarding what remote mail systems **do** with email which fails validation - you can choose to reject/quarantine a percentage of emails, have delivery reports sent to a nominated email address daily, etc.
+A message passes DMARC if either aligned SPF or aligned DKIM passes. A message fails DMARC if both fail.
 
-**Be aware that *lots of receiving server* will send you a report.**
+DMARC can generate a lot of aggregate reports. Use a DMARC reporting service or a mailbox with an automated parser; raw XML reports are difficult to review manually at scale.
 
-**Depending on the volume of mail you're sending (and how attractive your domain is to spoofers), this can result in hundreds of DMARC reports a day from different servers. This can become a little overwhelming to manage. This is why there are so many DMARC reporting toolsN.**
+### Do I Have It?
 
-My advice sign up with a tool that can help you process and interpret your DMARC reports, let them handle the heavy processing of parsing hundreds of reports a day and making actionable graphs based on the information they parse. 
+Check for a TXT record at:
 
+```text
+_dmarc.widgets.com
+```
 
-### Do I have it?
+You can use a DMARC lookup tool such as <https://mxtoolbox.com/dmarc.aspx>.
 
-Confirm that DMARC DNS TXT **records exist** for your domain, by using a DMARC validation tool (https://mxtoolbox.com/dmarc.aspx, for example). Supply your domain name and click `DMARC Lookup`.
+### How Do I Configure It?
 
-Here's an example of a correctly configured domain:
+Start with monitoring:
 
-![Domain with correct DMARC on Office365](img/dmarc1.png)
+```text
+Host name: _dmarc
+TXT value: v=DMARC1; p=none; pct=100; rua=mailto:dmarc-reports@widgets.com
+```
 
-And here's an example of an unconfigured domain:
+Review reports, identify all legitimate sources, and fix SPF or DKIM alignment issues. Then move to quarantine:
 
-![Domain with unconfigured DMARC on Office365](img/dmarc2.png)
+```text
+Host name: _dmarc
+TXT value: v=DMARC1; p=quarantine; pct=25; rua=mailto:dmarc-reports@widgets.com
+```
 
-### How do I get it?
+Increase `pct=` gradually:
 
-To protect your outgoing email with DMARC, setup a DNS TXT record.
+```text
+pct=50
+pct=75
+pct=100
+```
 
-Microsoft provides a [guide](https://docs.microsoft.com/en-us/office365/securitycompliance/use-dmarc-to-validate-email), as does [Google](https://support.google.com/a/answer/2466563?hl=en). You can also use an [online DMARC record generator](https://mxtoolbox.com/DMARCRecordGenerator.aspx?).
+After quarantine is stable, move to reject:
 
-At the most basic (*and harmless*) level, add a TXT record like this to your domain:
+```text
+Host name: _dmarc
+TXT value: v=DMARC1; p=reject; pct=100; rua=mailto:dmarc-reports@widgets.com
+```
 
-`_dmarc.yourdommain.com --> v=DMARC1; p=none; rua=mailto:postmaster@widgets.com`
+Repeat the process for subdomains and lower-volume domains before enforcing the parent domain.
 
-If you want to be more aggressive, and instruct remote servers to **reject** any emails which appear to be spoofed from you, use a record like this:
-
-`_dmarc.yourdommain.com --> v=DMARC1; p=reject; rua=mailto:postmaster@widgets.com`
-
-You can also stagger the rollout of DMARC, by instructing remote servers to reject only 10% of your email, and gradually increase this percentage:
-
-`_dmarc.yourdommain.com --> v=DMARC1; p=reject; rua=mailto:postmaster@widgets.com; pct=10`
-
+Reference: [Set up DMARC for Microsoft 365](https://learn.microsoft.com/en-us/defender-office-365/email-authentication-dmarc-configure)
 
 ## IPv6
 
-To support IPv6 in Office 365 you will need to open a support request with Microsoft per
-https://docs.microsoft.com/en-us/office365/SecurityCompliance/support-for-anonymous-inbound-email-messages-over-ipv6
+If you send mail over IPv6, publish matching SPF `ip6:` mechanisms or service includes for those IPv6 senders. Microsoft 365 support for inbound anonymous IPv6 mail has changed over time, so review current Microsoft guidance before opening support tickets or changing connectors.
 
+Reference: [Support for anonymous inbound email messages over IPv6](https://learn.microsoft.com/en-us/defender-office-365/mail-flow-about)
