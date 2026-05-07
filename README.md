@@ -1,8 +1,27 @@
 # Office 365 Basic Hygiene Checkup
 
+> **Maintained by DuoCircle.** Hosted version of this guide with live tools and richer examples: <https://duocircle.com/resources/office365-hygiene-checklist/>. Free DMARC reporting and aggregate-report parsing at <https://dmarcreport.com>.
+
 This guide covers basic email authentication hygiene for Microsoft 365 tenants that are not using a dedicated phishing gateway or the higher-end Microsoft Defender for Office 365 features.
 
 The goal is to make your own domain harder to spoof by publishing SPF, enabling DKIM signing, and rolling out DMARC carefully. Test changes before enforcing them, especially if third-party services send mail as your domain.
+
+## Free tools used in this guide
+
+You can run every lookup in this guide directly in your browser. None of these tools require an account.
+
+| Check | Tool |
+| --- | --- |
+| Inspect a published SPF record | [SPF Checker](https://dmarcreport.com/tools/spf-checker/) |
+| Validate SPF syntax and lookup count | [SPF Validator](https://dmarcreport.com/tools/spf-validator/) |
+| Generate a new SPF record from a sender list | [SPF Record Generator](https://dmarcreport.com/tools/spf-record-generator/) |
+| Inspect a DKIM key for a selector | [DKIM Lookup](https://dmarcreport.com/tools/dkim-lookup/) |
+| Inspect a published DMARC record | [DMARC Checker](https://dmarcreport.com/tools/dmarc-checker/) |
+| Generate a new DMARC record | [DMARC Record Generator](https://dmarcreport.com/tools/dmarc-record-generator/) |
+| Parse a raw DMARC aggregate (RUA) XML report in your browser | [DMARC Report Analyzer](https://dmarcreport.com/tools/dmarc-report-analyzer/) |
+| Check BIMI record (after DMARC reject) | [BIMI Checker](https://dmarcreport.com/tools/bimi-checker/) |
+| Check MTA-STS policy | [MTA-STS Checker](https://dmarcreport.com/tools/mta-sts-checker/) |
+| One-shot SPF + DKIM + DMARC summary for a domain | [Domain Auth Checker](https://dmarcreport.com/tools/domain-auth-checker/) |
 
 ## Preparation
 
@@ -45,7 +64,7 @@ SPF checks the envelope sender domain, not necessarily the visible `From` addres
 
 ### Do I Have It?
 
-Enter your domain into an SPF testing tool such as <https://mxtoolbox.com/spf.aspx>. Confirm that:
+Enter your domain into [DuoCircle's SPF Checker](https://dmarcreport.com/tools/spf-checker/) (or the [SPF Validator](https://dmarcreport.com/tools/spf-validator/) if you want a lookup-count check). Confirm that:
 
 1. Exactly one SPF TXT record exists for the domain.
 2. It includes every legitimate sender.
@@ -76,7 +95,7 @@ DomainKeys Identified Mail (DKIM) signs outbound mail with a private key. Receiv
 
 ### Do I Have It?
 
-Check DKIM in the Microsoft Defender portal or Exchange Online PowerShell. You can also use a DKIM validation tool such as <https://mxtoolbox.com/dkim.aspx>, but the selector value must match the selector Microsoft is using for your domain.
+Check DKIM in the Microsoft Defender portal or Exchange Online PowerShell. You can also use [DuoCircle's DKIM Lookup](https://dmarcreport.com/tools/dkim-lookup/), but the selector value must match the selector Microsoft is using for your domain.
 
 Use PowerShell to inspect all configured domains:
 
@@ -141,7 +160,10 @@ Domain-based Message Authentication, Reporting, and Conformance (DMARC) checks w
 
 A message passes DMARC if either aligned SPF or aligned DKIM passes. A message fails DMARC if both fail.
 
-DMARC can generate a lot of aggregate reports. Use a DMARC reporting service or a mailbox with an automated parser; raw XML reports are difficult to review manually at scale.
+DMARC can generate a lot of aggregate reports. Use a DMARC reporting service or a mailbox with an automated parser; raw XML reports are difficult to review manually at scale. Two free options:
+
+- **Hands-off ongoing reporting:** point your `rua=` to a free DuoCircle [DMARC Report](https://dmarcreport.com/) account and review the dashboard.
+- **One-off parsing of a specific report:** drop the XML into the [DMARC Report Analyzer](https://dmarcreport.com/tools/dmarc-report-analyzer/) and read it in your browser. Nothing is uploaded to a server.
 
 ### Do I Have It?
 
@@ -151,7 +173,7 @@ Check for a TXT record at:
 _dmarc.widgets.com
 ```
 
-You can use a DMARC lookup tool such as <https://mxtoolbox.com/dmarc.aspx>.
+You can use [DuoCircle's DMARC Checker](https://dmarcreport.com/tools/dmarc-checker/) to inspect the published record.
 
 ### How Do I Configure It?
 
@@ -193,3 +215,18 @@ Reference: [Set up DMARC for Microsoft 365](https://learn.microsoft.com/en-us/de
 If you send mail over IPv6, publish matching SPF `ip6:` mechanisms or service includes for those IPv6 senders. Microsoft 365 support for inbound anonymous IPv6 mail has changed over time, so review current Microsoft guidance before opening support tickets or changing connectors.
 
 Reference: [Support for anonymous inbound email messages over IPv6](https://learn.microsoft.com/en-us/defender-office-365/mail-flow-about)
+
+---
+
+## Maintained by DuoCircle
+
+DuoCircle is a family of specialized email products. We've operated continuously since 2014 and serve over 50,000 organizations. The tools linked above are free, in-browser, and unauthenticated; the products below are how we earn a living.
+
+| Pillar | Products |
+| --- | --- |
+| [Authenticate](https://duocircle.com/products/authenticate/) | [SPF Management (AutoSPF)](https://autospf.com), [DMARC Reporting (DMARC Report)](https://dmarcreport.com), [Mail Flow Monitoring](https://mailflowmonitoring.com), BIMI hosting |
+| [Protect](https://duocircle.com/products/protect/) | [Phishing Protection](https://duocircle.com/email/phishing-protection/), [Spam Filtering](https://duocircle.com/email/spam-filtering/), [Visual Mail Verification (Verisend)](https://duocircle.com/email/visual-mail-verification/), [Email Security for HCL Notes / Domino (SpamSentinel)](https://duocircle.com/email/lotus-notes-email-security/) |
+| [Deliver](https://duocircle.com/products/deliver/) | [Outbound SMTP](https://outboundsmtp.com), [Developer Email API (unsent.dev)](https://unsent.dev), [Inbox Placement Testing (InboxIssue)](https://inboxissue.com), [Cold Email Outreach (NuReply)](https://nureply.com) |
+| [Route](https://duocircle.com/products/route/) | [Email Forwarding](https://duocircle.com/email/email-forwarding/), [Alumni Forwarding](https://alumniforwarding.com), [Backup MX](https://duocircle.com/email/email-backup-mx/), [Tenant Migration](https://tenantmigration.com), Message Replay |
+
+Trust posture, SOC 2, CSA STAR, HECVAT, and our standing Bonterms NDA: <https://trust.duocircle.com>. Pull requests welcome.
